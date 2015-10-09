@@ -20,10 +20,15 @@ function getAddressBook(id) {
 
 function getEntries(addressBookId) {
     // TODO...
+    return $.getJSON(API_URL + "/Entries?filter[where][addressBookId]=" + addressBookId  +"&filter[order]=lastName%20ASC&filter[limit]=5");
+    
 }
+
+console.log( getEntries(2) );
 
 function getEntry(entryId) {
     // TODO..
+    return $.getJSON(API_URL + '/Entries/' + id);
 }
 // End data retrieval functions
 
@@ -33,11 +38,35 @@ function displayAddressBooksList(skip) {
         function(addressBooks) {
             // console.log(addressBooks);
             $app.html(''); // Clear the #app div
-            $app.append('<h2>List of Address Books</h2>');
-            $app.append('<ul>');
+<<<<<<< HEAD
+ 
+=======
+            $app.append('<h2>Address Books List</h2>');
+            $app.append('<ul></ul>');
+>>>>>>> cc6bb83c324e5b01ae912cd6e28b36aeaa662348
             
             addressBooks.forEach(function(ab) {
                 $app.find('ul').append('<li data-id="' + ab.id + '">' + ab.name + '</li>');
+            });
+            
+            $app.find('li').on('click', function() {
+                var addressBookId = $(this).data('id');
+                displayAddressBookEntries(addressBookId);
+            });
+        }
+    )
+}
+
+function displayAddressBookEntries(addressBookId) {
+    getEntries(addressBookId).then(
+        function(entries) {
+            
+            $app.html(''); // Clear the #app div
+            $app.append('<h2>Entries</h2>');
+            $app.append('<ul>');
+            
+            addressBooks.forEach(function(ent) {
+                $app.find('ul').append('<li data-id="' + ent.id + '">' + ent.name + '</li>');
             });
             
             $app.find('li').on('click', function() {
@@ -46,9 +75,7 @@ function displayAddressBooksList(skip) {
             });
         }
     )
-}
-
-function displayAddressBook(addressBookId) {
+  
     
 }
 
