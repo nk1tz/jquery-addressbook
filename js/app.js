@@ -33,7 +33,7 @@ function displayAddressBooksList(skip) {
         function(addressBooks) {
             // console.log(addressBooks);
             $app.html(''); // Clear the #app div
-            $app.append('<h2>Address Books List</h2>');
+            $app.append('<h2>List of Address Books</h2>');
             $app.append('<ul>');
             
             addressBooks.forEach(function(ab) {
@@ -65,8 +65,8 @@ AddressBooksListButtons();
 function AddressBooksListButtons(){
     $next.html(''); // Clear the #next div
     $prev.html(''); // Clear the #prev div
-    $next.text("Next 5 Books");
-    $prev.text("Previous 5 Books");
+    $next.text("Display Next 5");
+    $prev.text("Display Prev 5");
     $next.on('click', function(){
         var $skip = $app.find('li:last-child')
         var $id = $skip.data('id')
@@ -74,7 +74,7 @@ function AddressBooksListButtons(){
     })
     $prev.on('click', function(){
         var $skip = $app.find('li:first-child')
-        var $id = $skip.data('id')
+        var $id = $skip.data('id');
         return displayAddressBooksList($id - 5);
     })
     
