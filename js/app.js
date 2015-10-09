@@ -135,16 +135,16 @@ function displayEntry(id) {
 
 
 function AddressBooksListButtons() {
-    var offset = 0
+    var offset = 0;
     $buttons.html('');
-    $buttons.append('<button id="prev">View Previous 5 Books</button>');
-    $buttons.append('<button id="next">View Next 5 Books</button>');
+    $buttons.append('<button id="prev">Previous 5 Books</button>');
+    $buttons.append('<button id="next">Next 5 Books</button>');
     $("#next").on('click', function() {
-        offset +=5
+        offset +=5;
         displayAddressBooksList(offset);
     });
     $("#prev").on('click', function() {
-        offset -=5
+        offset -=5;
         if (offset < 0) {
             offset = 0;
         }
@@ -153,17 +153,17 @@ function AddressBooksListButtons() {
 }
 
 function AddressBookEntriesButtons(addressBookId) {
-    var offset = 0
+    var offset = 0;
     $buttons.html('');
-    $buttons.append('<button id="prev">View Previous 5 Entries</button>');
+    $buttons.append('<button id="prev">Previous 5 Entries</button>');
     $buttons.append('<button id="back">Back</button>');
-    $buttons.append('<button id="next">View Next 5 Entries</button>');
+    $buttons.append('<button id="next">Next 5 Entries</button>');
     $("#next").on('click', function() {
-        offset +=5
+        offset +=5;
         displayAddressBookEntries(addressBookId, offset);
     });
     $("#prev").on('click', function() {
-        offset -=5
+        offset -=5;
         if (offset < 0) {
             offset = 0;
         }
@@ -177,13 +177,13 @@ function AddressBookEntriesButtons(addressBookId) {
 
 
 function entryButtons(addressBookId) {
-    console.log(addressBookId)
+    console.log(addressBookId);
     $buttons.html('');
     $buttons.append('<button id="next">View Address Books</button>');
     $buttons.append('<button id="prev">Veiw Entry Listing</button>');
     $("#next").on('click', function() {
-        AddressBooksListButtons()
-        displayAddressBooksList(0)
+        AddressBooksListButtons();
+        displayAddressBooksList(0);
     });
     $("#prev").on('click', function() {
         AddressBookEntriesButtons(addressBookId);
