@@ -40,13 +40,10 @@ function displayAddressBooksList(skip) {
         function(addressBooks) {
             // console.log(addressBooks);
             $app.html(''); // Clear the #app div
-<<<<<<< HEAD
+
             $app.append('<h2>Address Books List</h2>');
             $app.append('<ul></ul>');
-=======
-            $app.append('<h2>List of Address Books</h2>');
-            $app.append('<ul>');
->>>>>>> 34133d04c52bf8700d47ff021b0d0c4e704764cf
+
             
             addressBooks.forEach(function(ab) {
                 $app.find('ul').append('<li data-id="' + ab.id + '">' + ab.name + '</li>');
@@ -78,8 +75,6 @@ function displayAddressBookEntries(addressBookId) {
             });
         }
     )
-  
-    
 }
 
 function displayEntry() {
@@ -96,8 +91,15 @@ function displayEntry() {
             $app.find('ul').append('<li>'+ "id: " + entryInfo[0].id + '</li>');
             $app.find('ul').append('<li>'+ "addressBookId: " + entryInfo[0].addressBookId + '</li>');
             $app.find('ul').append('<li id="addresses">'+ "address(es): " +'</li>');
-            entryInfo[0].addresses.forEach(function(ad) {
-                $app.find('#addresses').append('<li data-id="' + ab.id + '">' + ab.name + '</li>');
+            entryInfo[0].addresses.forEach(function(ad, ind) {
+                $app.find('#addresses').append('<li>  Address #' + ind + '</li>');
+                $app.find('#addresses').append('<li>' + "line1 :" + ad.line1 + '</li>');
+                $app.find('#addresses').append('<li>' + "line2 :" + ad.line2 + '</li>');
+                $app.find('#addresses').append('<li>' + "city :" + ad.city + '</li>');
+                $app.find('#addresses').append('<li>' + "state :" + ad.state + '</li>');
+                $app.find('#addresses').append('<li>' + "zip :" + ad.zip + '</li>');
+                $app.find('#addresses').append('<li>' + "country :" + ad.country + '</li>');
+                $app.find('#addresses').append('<li>' + "type :" + ad.type + '</li>');
             });
             
             
@@ -107,6 +109,7 @@ function displayEntry() {
 
 // Start the app by displaying all the addressbooks
 displayAddressBooksList(0);
+
 AddressBooksListButtons();
 
 function AddressBooksListButtons(){
