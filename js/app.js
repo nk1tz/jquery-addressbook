@@ -155,9 +155,9 @@ function AddressBooksListButtons() {
 function AddressBookEntriesButtons(addressBookId) {
     var offset = 0
     $buttons.html('');
-    $buttons.append('<button id="prev">Display Prev 5 Entries</button>');
-    $buttons.append('<button id="back">View Address Books</button>');
-    $buttons.append('<button id="next">Display Next 5 Entries</button>');
+    $buttons.append('<button id="prev">View Previous 5 Entries</button>');
+    $buttons.append('<button id="back">Back</button>');
+    $buttons.append('<button id="next">View Next 5 Entries</button>');
     $("#next").on('click', function() {
         offset +=5
         displayAddressBookEntries(addressBookId, offset);
@@ -168,6 +168,10 @@ function AddressBookEntriesButtons(addressBookId) {
             offset = 0;
         }
         displayAddressBookEntries(addressBookId, offset);
+    });
+    $("#back").on('click', function() {
+        displayAddressBooksList(0);
+        AddressBooksListButtons();
     });
 }
 
