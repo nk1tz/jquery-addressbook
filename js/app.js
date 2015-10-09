@@ -137,14 +137,13 @@ function displayEntry(id) {
 function AddressBooksListButtons() {
     var offset = 0
     $buttons.html('');
-    $buttons.append('<button id="entryPrev">Display Prev 5</button>');
-    $buttons.append('<button id="entryNext">Display Next 5</button>');
-    $("#entryNext").on('click', function() {
+    $buttons.append('<button id="prev">View Previous 5 Books</button>');
+    $buttons.append('<button id="next">View Next 5 Books</button>');
+    $("#next").on('click', function() {
         offset +=5
         displayAddressBooksList(offset);
     });
-    $("#entryPrev").on('click', function() {
-    // $("#bookPrev").on('click', function() {
+    $("#prev").on('click', function() {
         offset -=5
         if (offset < 0) {
             offset = 0;
@@ -152,23 +151,18 @@ function AddressBooksListButtons() {
         displayAddressBooksList(offset);
     });
 }
-// End functions that display views
-
-
-// Start the app by displaying all the addressbooks
-
-// AddressBooksListButtons();
 
 function AddressBookEntriesButtons(addressBookId) {
     var offset = 0
     $buttons.html('');
-    $buttons.append('<button id="entryPrev">Display Prev 5</button>');
-    $buttons.append('<button id="entryNext">Display Next 5</button>');
-    $("#entryNext").on('click', function() {
+    $buttons.append('<button id="prev">Display Prev 5 Entries</button>');
+    $buttons.append('<button id="back">View Address Books</button>');
+    $buttons.append('<button id="next">Display Next 5 Entries</button>');
+    $("#next").on('click', function() {
         offset +=5
         displayAddressBookEntries(addressBookId, offset);
     });
-    $("#entryPrev").on('click', function() {
+    $("#prev").on('click', function() {
         offset -=5
         if (offset < 0) {
             offset = 0;
@@ -181,20 +175,21 @@ function AddressBookEntriesButtons(addressBookId) {
 function entryButtons(addressBookId) {
     console.log(addressBookId)
     $buttons.html('');
-    $buttons.append('<button id="bookList">Return to Address Book List</button>');
-    $buttons.append('<button id="entryList">Return to Entry Listing</button>');
-    $("#bookList").on('click', function() {
+    $buttons.append('<button id="next">View Address Books</button>');
+    $buttons.append('<button id="prev">Veiw Entry Listing</button>');
+    $("#next").on('click', function() {
         AddressBooksListButtons()
         displayAddressBooksList(0)
     });
-    $("#entryList").on('click', function() {
+    $("#prev").on('click', function() {
         AddressBookEntriesButtons(addressBookId);
         displayAddressBookEntries(addressBookId, 0);
     });
 }
 
 
+//this starts the program by calling the function to list the
+//address book entries and add the buttons to the DOM
 displayAddressBooksList(0);
-
 AddressBooksListButtons();
 

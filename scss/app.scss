@@ -1,18 +1,50 @@
 @import "settings";
 @import "foundation";
 
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
+h1, h2 {
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+}
+
+h2 {
+    padding-bottom: 30px;
+}
+
 #next{
     float: right;
 }
 
 button{
-    font-size: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    border: 2px solid black;
+    margin: 20px;
+    border-radius: 25px;
+    font-family: 'Open Sans';
+    
+    
+}
+
+li:hover {
+    text-decoration:underline;
     cursor: pointer;
 }
 
-h1, h2{
+
+#app {
     text-align: center;
 }
+
+
+
+
 // Or selectively include components
 // @import
 //   "foundation/components/accordion",
