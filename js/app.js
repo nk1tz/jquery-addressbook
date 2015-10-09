@@ -44,6 +44,8 @@ function displayAddressBooksList(skip) {
             $app.append('<h2>Address Books List</h2>');
             $app.append('<ul></ul>');
 
+
+
             addressBooks.forEach(function(ab) {
                 $app.find('ul').append('<li data-id="' + ab.id + '">' + ab.name + '</li>');
             });
@@ -63,9 +65,10 @@ function displayAddressBookEntries(addressBookId) {
             $app.html(''); // Clear the #app div
             $app.append('<h2>Entries</h2>');
             $app.append('<ul>');
-
+console.log(entries)
             entries.forEach(function(ent) {
-                $app.find('ul').append('<li data-id="' + ent.id + '">' + ent.name + '</li>');
+                console.log(ent)
+                $app.find('ul').append('<li data-id="' + ent.id + '">' + ent.lastName + ", " + ent.firstName + '</li>');
             });
 
             $app.find('li').on('click', function() {
@@ -77,15 +80,24 @@ function displayAddressBookEntries(addressBookId) {
 
 }
 
-function displayEntry(id) {
-    getEntry(id).then(
 
+function displayEntry() {
+    getEntry().then(
         function(entryInfo) {
 
             $app.html(''); // Clear the #app div
             $app.append('<h2>Contact Information:</h2>');
             $app.append('<ul></ul>');
 
+            $app.find('ul').append('<li>' + "First Name: " + entryInfo[0].firstName + '</li>');
+            $app.find('ul').append('<li>' + "Lirst Name: " + entryInfo[0].lastName + '</li>');
+            $app.find('ul').append('<li>' + "Birthday: " + entryInfo[0].birthday + '</li>');
+            $app.find('ul').append('<li>' + "id: " + entryInfo[0].id + '</li>');
+            $app.find('ul').append('<li>' + "addressBookId: " + entryInfo[0].addressBookId + '</li>');
+            $app.find('ul').append('<li id="addresses">' + "address(es): " + '</li>');
+            entryInfo[0].addresses.forEach(function(ab) {
+                $app.find('#addresses').append('<li data-id="' + ab.id + '">' + ab.name + '</li>');
+            });
             $app.find('ul').append('<li>' + "First Name: " + entryInfo[0].firstName + '</li>');
             $app.find('ul').append('<li>' + "Lirst Name: " + entryInfo[0].lastName + '</li>');
             $app.find('ul').append('<li>' + "Birthday: " + entryInfo[0].birthday + '</li>');
@@ -119,52 +131,55 @@ function displayEntry(id) {
         }
     );
 }
-            // End functions that display views
 
 
-            // Start the app by displaying all the addressbooks
-
-            // AddressBooksListButtons();
-
-            function AddressBooksListButtons() {
-                $next.html(''); // Clear the #next div
-                $prev.html(''); // Clear the #prev div
-                $next.text("Display Next 5");
-                $prev.text("Display Prev 5");
-                $next.on('click', function() {
-                    var $skip = $app.find('li:last-child')
-                    var $id = $skip.data('id')
-                    return displayAddressBooksList($id);
-                })
-                $prev.on('click', function() {
-                    var $skip = $app.find('li:first-child')
-                    var $id = $skip.data('id');
-                    return displayAddressBooksList($id - 5);
-                })
-
-            }
-
-            displayAddressBooksList(0);
+// End functions that display views
 
 
-            AddressBooksListButtons();
+// Start the app by displaying all the addressbooks
 
-            function AddressBooksListButtons() {
-                $next.html(''); // Clear the #next div
-                $prev.html(''); // Clear the #prev div
-                $next.text("Display Next 5");
-                $prev.text("Display Prev 5");
-                $next.on('click', function() {
-                    var $skip = $app.find('li:last-child')
-                    var $id = $skip.data('id')
-                    return displayAddressBooksList($id);
-                })
-                $prev.on('click', function() {
-                    var $skip = $app.find('li:first-child')
-                    var $id = $skip.data('id');
-                    return displayAddressBooksList($id - 5);
-                })
+// AddressBooksListButtons();
 
-            }
+function AddressBooksListButtons() {
+    $next.html(''); // Clear the #next div
+    $prev.html(''); // Clear the #prev div
+    $next.text("Display Next 5");
+    $prev.text("Display Prev 5");
+    $next.on('click', function() {
+        var $skip = $app.find('li:last-child')
+        var $id = $skip.data('id')
+        return displayAddressBooksList($id);
+    })
+    $prev.on('click', function() {
+        var $skip = $app.find('li:first-child')
+        var $id = $skip.data('id');
+        return displayAddressBooksList($id - 5);
+    })
 
-            AddressBooksListButtons()
+}
+
+displayAddressBooksList(0);
+
+
+AddressBooksListButtons();
+
+function AddressBooksListButtons() {
+    $next.html(''); // Clear the #next div
+    $prev.html(''); // Clear the #prev div
+    $next.text("Display Next 5");
+    $prev.text("Display Prev 5");
+    $next.on('click', function() {
+        var $skip = $app.find('li:last-child')
+        var $id = $skip.data('id')
+        return displayAddressBooksList($id);
+    })
+    $prev.on('click', function() {
+        var $skip = $app.find('li:first-child')
+        var $id = $skip.data('id');
+        return displayAddressBooksList($id - 5);
+    })
+
+}
+
+AddressBooksListButtons();
+
