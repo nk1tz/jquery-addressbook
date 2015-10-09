@@ -135,23 +135,11 @@ function displayEntry(id) {
 
 
 function AddressBooksListButtons() {
-    // var offset = 0
-    // $next.html(''); // Clear the #next div
-    // $prev.html(''); // Clear the #prev div
-    // $next.text("Display Next 5");
-    // $prev.text("Display Prev 5");
     var offset = 0
     $buttons.html('');
-    // $buttons.append('<button id="bookPrev">Display Prev 5</button>');
-    // $buttons.append('<button id="bookNext">Display Next 5</button>');
     $buttons.append('<button id="entryPrev">Display Prev 5</button>');
     $buttons.append('<button id="entryNext">Display Next 5</button>');
-    // $("#entryNext").text("Display Next 5");
-    // $("#entryPrev").text("Display Prev 5");
     $("#entryNext").on('click', function() {
-    // $("#entryPrev").on('click', function() {
-    
-    // $("#bookNext").on('click', function() {
         offset +=5
         displayAddressBooksList(offset);
     });
@@ -176,8 +164,6 @@ function AddressBookEntriesButtons(addressBookId) {
     $buttons.html('');
     $buttons.append('<button id="entryPrev">Display Prev 5</button>');
     $buttons.append('<button id="entryNext">Display Next 5</button>');
-    // $("#entryNext").text("Display Next 5");
-    // $("#entryPrev").text("Display Prev 5");
     $("#entryNext").on('click', function() {
         offset +=5
         displayAddressBookEntries(addressBookId, offset);
@@ -197,8 +183,6 @@ function entryButtons(addressBookId) {
     $buttons.html('');
     $buttons.append('<button id="bookList">Return to Address Book List</button>');
     $buttons.append('<button id="entryList">Return to Entry Listing</button>');
-    // $("#entryNext").text("Display Next 5");
-    // $("#entryPrev").text("Display Prev 5");
     $("#bookList").on('click', function() {
         AddressBooksListButtons()
         displayAddressBooksList(0)
