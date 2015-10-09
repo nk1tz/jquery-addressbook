@@ -6,10 +6,12 @@ var API_URL = "https://loopback-rest-api-demo-ziad-saab.c9.io/api";
 
 // Get a reference to the <div id="app">. This is where we will output our stuff
 var $app = $('#app');
+var $next = $("#next");
+var $prev = $("#previous");
 
 // Data retrieval functions
-function getAddressBooks() {
-    return $.getJSON(API_URL + '/AddressBooks');
+function getAddressBooks(skip) {
+    return $.getJSON(API_URL + "/AddressBooks?filter[limit]=5&[order]=id:ASC&filter[skip]=" + skip);
 }
 
 function getAddressBook(id) {
@@ -26,10 +28,10 @@ function getEntry(entryId) {
 // End data retrieval functions
 
 // Functions that display things on the screen (views)
-function displayAddressBooksList() {
-    getAddressBooks().then(
+function displayAddressBooksList(skip) {
+    getAddressBooks(skip).then(
         function(addressBooks) {
-            
+            // console.log(addressBooks);
             $app.html(''); // Clear the #app div
             $app.append('<h2>Address Books List</h2>');
             $app.append('<ul>');
@@ -57,4 +59,23 @@ function displayEntry() {
 
 
 // Start the app by displaying all the addressbooks
-displayAddressBooksList();
+displayAddressBooksList(0);
+AddressBooksListButtons();
+
+function AddressBooksListButtons(){
+    $next.html(''); // Clear the #next div
+    $prev.html(''); // Clear the #prev div
+    $next.text("Next 5 Books");
+    $prev.text("Previous 5 Books");
+    $next.on('click', function(){
+        var $skip = $app.find('li:last-child')
+        var $id = $skip.data('id')
+        return displayAddressBooksList($id);
+    })
+    $prev.on('click', function(){
+        var $skip = $app.find('li:first-child')
+        var $id = $skip.data('id')
+        return displayAddressBooksList($id - 5);
+    })
+    
+}

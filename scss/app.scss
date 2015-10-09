@@ -1,6 +1,13 @@
 @import "settings";
 @import "foundation";
 
+#next{
+    float: right;
+}
+
+button{
+    font-size: 12px;
+}
 // Or selectively include components
 // @import
 //   "foundation/components/accordion",
