@@ -21,8 +21,9 @@ function getEntries(addressBookId) {
 }
 
 function getEntry(entryId) {
-    // TODO..
+   return $.getJSON(API_URL + '/Entries?filter[where][id]=' + entryId + '&filter[include]=addresses&filter[include]=phones&filter[include]=emails');
 }
+
 // End data retrieval functions
 
 // Functions that display things on the screen (views)
@@ -51,7 +52,24 @@ function displayAddressBook(addressBookId) {
 }
 
 function displayEntry() {
-    
+    getEntry().then(
+        function(entryInfo) {
+            
+            $app.html(''); // Clear the #app div
+            $app.append('<h2>Contact Information:</h2>');
+            $app.append('<ul></ul>');
+            
+            $app.find('ul').append('<li>'+ "First Name: " + entryInfo[0].firstName + '</li>');
+            $app.find('ul').append('<li>'+ "Lirst Name: " + entryInfo[0].lastName + '</li>');
+            $app.find('ul').append('<li>'+ "Birthday: " + entryInfo[0].birthday + '</li>');
+            $app.find('ul').append('<li>'+ "id: " + entryInfo[0].id + '</li>');
+            $app.find('ul').append('<li>'+ "addressBookId: " + entryInfo[0].addressBookId + '</li>');
+            $app.find('ul').append('<li id="addresses">'+ "address(es): " +'</li>');
+            entryInfo[0].addresses.forEach(function(ad) {
+                $app.find('#addresses').append('<li data-id="' + ab.id + '">' + ab.name + '</li>');
+            });
+            
+            
 }
 // End functions that display views
 
