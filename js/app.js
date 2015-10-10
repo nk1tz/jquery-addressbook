@@ -33,8 +33,8 @@ function getCount(query) {
     return $.getJSON(API_URL + query).then(
         function(results) {
             var count = Object.keys(results).length;
-            return count
-        })
+            return count;
+        });
 }
 
 // End data retrieval functions
@@ -140,22 +140,37 @@ function AddressBooksListButtons() {
             $buttons.html('');
             $buttons.append('<button id="prev">Previous 5 Books</button>');
             $buttons.append('<button id="next">Next 5 Books</button>');
-            $("#prev").prop({disabled: true}) 
+            $("#prev").prop({
+                disabled: true
+            })
+            if (offset + 5 >= limit) {
+                $("#next").prop({
+                    disabled: true
+                });
+            }
             $("#next").on('click', function() {
-                $("#prev").prop({disabled: false})
+                $("#prev").prop({
+                    disabled: false
+                })
                 offset += 5;
                 if (offset + 5 >= limit) {
-                    $(this).prop({disabled: true});
+                    $(this).prop({
+                        disabled: true
+                    });
                 }
                 displayAddressBooksList(offset);
             });
             $("#prev").on('click', function() {
                 offset -= 5;
                 if (offset >= 0) {
-                    $("#next").prop({disabled: false})
+                    $("#next").prop({
+                        disabled: false
+                    })
                 }
-                if (offset -5  < 0) {
-                    $("#prev").prop({disabled: true})
+                if (offset - 5 < 0) {
+                    $("#prev").prop({
+                        disabled: true
+                    })
                 }
                 displayAddressBooksList(offset);
             });
@@ -164,44 +179,55 @@ function AddressBooksListButtons() {
 
 function AddressBookEntriesButtons(addressBookId) {
     getCount("/Entries?filter[where][addressBookId]=" + addressBookId).then(
-        function(count){
-        var limit = count;
-        var offset = 0;
-        $buttons.html('');
-        $buttons.append('<button id="prev">Previous 5 Entries</button>');
-        $buttons.append('<button id="back">Back</button>');
-        $buttons.append('<button id="next">Next 5 Entries</button>');
-        $("#prev").prop({disabled: true}) 
-        $("#next").on('click', function() {
-                $("#prev").prop({disabled: false})
+        function(count) {
+            var limit = count;
+            var offset = 0;
+            $buttons.html('');
+            $buttons.append('<button id="prev">Previous 5 Entries</button>');
+            $app.prepend('<button id="back">Back</button>');
+            $buttons.append('<button id="next">Next 5 Entries</button>');
+            if (offset + 5 >= limit) {
+                $("#next").prop({
+                    disabled: true
+                });
+            }
+            $("#prev").prop({
+                disabled: true
+            });
+            $("#next").on('click', function() {
+                $("#prev").prop({
+                    disabled: false
+                });
                 offset += 5;
                 if (offset + 5 >= limit) {
-                    $(this).prop({disabled: true});
+                    $(this).prop({
+                        disabled: true
+                    });
                 }
                 displayAddressBookEntries(addressBookId, offset);
             });
             $("#prev").on('click', function() {
                 offset -= 5;
                 if (offset >= 0) {
-                    $("#next").prop({disabled: false})
+                    $("#next").prop({
+                        disabled: false
+                    });
                 }
-                if (offset -5  < 0) {
-                    $("#prev").prop({disabled: true})
+                if (offset - 5 < 0) {
+                    $("#prev").prop({
+                        disabled: true
+                    });
                 }
                 displayAddressBookEntries(addressBookId, offset);
             });
-        $("#back").on('click', function() {
-            displayAddressBooksList(0);
-            AddressBooksListButtons();
+            $("#back").on('click', function() {
+                displayAddressBooksList(0);
+                AddressBooksListButtons();
+            });
         });
-    });
 }
 
-
-
-
 function entryButtons(addressBookId) {
-    console.log(addressBookId);
     $buttons.html('');
     $buttons.append('<button id="next">View Address Books</button>');
     $buttons.append('<button id="prev">Veiw Entry Listing</button>');
