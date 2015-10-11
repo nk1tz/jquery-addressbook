@@ -154,20 +154,29 @@ function displayEntryEdit(id){
             $app.find('form').append('<br>Birthday: <br><input type="text" name="birthday" value="' + entryInfo[0].birthday + '">');
             $app.find('form').append("<input type='hidden' name='id' value='"+ entryInfo[0].id +"'>");
             $app.find('form').append("<input type='hidden' name='addressBookId' value='"+ entryInfo[0].addressBookId +"'>");
-            $app.find('form').append("<input type='submit' style='visibility: hidden;'>");
+            $app.find('form').append("<input type='submit' onClick='submitForm()' style='visibility: hidden;'/>");
             
-            $('form').submit(function(event){
-                alert( event );
-                // $.putJSON(API_URL + '/Entries
-                event.preventDefault();
-                displayEntry(id);
+            $(function submitForm() {
+                //hang on event of form with id=myform
+                $("form").submit(function(e) {
+                    e.preventDefault();
+                    var actionurl = e.currentTarget.action;
+                    $.ajax({
+                            url: actionurl,
+                            type: 'put',
+                            dataType: 'json',
+                            data: $("form").serialize(),
+                            success: function(data) {
+                            }
+                    });
+                    displayEntry(id);
+            
+                });
             });
             
             EntryDoneEditButton(id);
-            
            
-        }
-    );
+        });
 }
 //<input type="submit" style="visibility: hidden;" >
 //Code for addresses 
@@ -206,8 +215,8 @@ function EntryEditButton(entryId){
 }
 
 function EntryDoneEditButton(entryId){
-     $app.append('<button id="doneEdit">Done</button>');
-     $app.find('#doneEdit').on('click', function(){
+     $app.append('<button id="cancelEdit">Cancel</button>');
+     $app.find('#cancelEdit').on('click', function(){
         return displayEntry(entryId);
      });
      
