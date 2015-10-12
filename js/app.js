@@ -6,18 +6,13 @@ var API_URL = "https://loopback-rest-api-demo-ziad-saab.c9.io/api";
 
 // Get a reference to the <div id="app">. This is where we will output our stuff
 var $app = $('#app');
-var $buttons = $("#buttons")
-var $next = $("#next");
-var $prev = $("#previous");
+var $buttons = $("#buttons");
 
 // Data retrieval functions
 function getAddressBooks(skip) {
     return $.getJSON(API_URL + "/AddressBooks?filter[limit]=5&[order]=id:ASC&filter[skip]=" + skip);
 }
 
-// function getAddressBook(id) {
-//     return $.getJSON(API_URL + '/AddressBooks/' + id);
-// }
 
 function getEntries(addressBookId, offset) {
     return $.getJSON(API_URL + "/Entries?filter[where][addressBookId]=" + addressBookId + "&filter[order]=lastName%20ASC&filter[limit]=5&filter[skip]=" + offset);
@@ -37,16 +32,14 @@ function getCount(query) {
         });
 }
 
-// End data retrieval functions
 
 // Functions that display things on the screen (views)
 //this function works
 function displayAddressBooksList(skip) {
     getAddressBooks(skip).then(
         function(addressBooks) {
-            // console.log(addressBooks);
 
-            $app.html(''); // Clear the #app div
+            $app.html(''); 
 
 
             $app.append('<h2>Address Books List</h2>');
@@ -98,14 +91,15 @@ function displayEntry(id) {
             $app.html(''); // Clear the #app div
             $app.append('<h2>Contact Information:</h2>');
             $app.append('<ul id="contact"></ul>');
+
             $app.find('#contact').append('<li>' + "First Name: " + entryInfo[0].firstName + '</li>');
             $app.find('#contact').append('<li>' + "Lirst Name: " + entryInfo[0].lastName + '</li>');
             $app.find('#contact').append('<li>' + "Birthday: " + entryInfo[0].birthday + '</li>');
-            // $app.find('ul').append('<li>' + "id: " + entryInfo[0].id + '</li>');
-            // $app.find('ul').append('<li>' + "addressBookId: " + entryInfo[0].addressBookId + '</li>');
             $app.find('#contact').append('<ul id="addresses">' + "address(es): " + '</ul>');
             entryInfo[0].addresses.forEach(function(ad, ind) {
+
                 $app.find('#addresses').append('<li>  Address #' + ind + 1 + '</li>');
+
                 $app.find('#addresses').append('<li>' + "line1 :" + ad.line1 + '</li>');
                 $app.find('#addresses').append('<li>' + "line2 :" + ad.line2 + '</li>');
                 $app.find('#addresses').append('<li>' + "city :" + ad.city + '</li>');
@@ -115,21 +109,81 @@ function displayEntry(id) {
                 $app.find('#addresses').append('<li>' + "type :" + ad.type + '</li>');
             });
             $app.find('#contact').append('<ul id="phones">' + "phone(s): " + '</ul>');
+
             entryInfo[0].phones.forEach(function(ph, ind) {
                 $app.find('#phones').append('<li>  Phone #' + ind + 1 + '</li>');
+
                 $app.find('#phones').append('<li>' + "Phone Number :" + ph.phoneNumber + '</li>');
                 $app.find('#phones').append('<li>' + "Type :" + ph.type + '</li>');
                 $app.find('#phones').append('<li>' + "Phone Type :" + ph.phoneType + '</li>');
             });
+
             $app.find('#contact').append('<ul id="emais">' + "email(s): " + '</ul>');
             entryInfo[0].emails.forEach(function(em, ind) {
                 $app.find('#emails').append('<li>  Email #' + ind + 1 + '</li>');
                 $app.find('#emails').append('<li>' + "Email Address :" + em.email + '</li>');
                 $app.find('#emails').append('<li>' + "Type :" + em.type + '</li>');
             });
+            EntryEditButton(id);
         }
     );
 
+
+}
+
+
+function displayEntryEdit(id){
+    getEntry(id).then(
+        function(entryInfo) {
+
+            $app.html(''); // Clear the #app div
+            $app.append('<h2>Contact Information:</h2>');
+            $app.append('<ul id="contact"></ul>');
+            $app.find('ul').append('<form action="' + API_URL + '/Entries" method="put" enctype="application/json" autocomplete="off" novalidate></form>');
+            
+            $app.find('form').append('<br>First Name: <br><input type="text" name="firstName" value="' + entryInfo[0].firstName + '">');
+            $app.find('form').append('<br>Last Name: <br><input type="text" name="lastName" value="' + entryInfo[0].lastName + '">');
+            $app.find('form').append('<br>Birthday: <br><input type="text" name="birthday" value="' + entryInfo[0].birthday + '">');
+            $app.find('form').append("<input type='hidden' name='id' value='"+ entryInfo[0].id +"'>");
+            $app.find('form').append("<input type='hidden' name='addressBookId' value='"+ entryInfo[0].addressBookId +"'>");
+            $app.find('form').append("<input type='submit' onClick='submitForm()' style='visibility: hidden;'/>");
+            
+            $(function submitForm() {
+                //hang on event of form with id=myform
+                $("form").submit(function(e) {
+                    e.preventDefault();
+                    var actionurl = e.currentTarget.action;
+                    $.ajax({
+                            url: actionurl,
+                            type: 'put',
+                            dataType: 'json',
+                            data: $("form").serialize(),
+                            success: function(data) {
+                            }
+                    });
+                    displayEntry(id);
+            
+                });
+            });
+            
+            EntryDoneEditButton(id);
+           
+        });
+}
+
+function EntryEditButton(entryId){
+     $app.append('<button id="edit">EDIT</button>');
+     $app.find('#edit').on('click', function(){
+        return displayEntryEdit(entryId);
+     });
+}
+
+function EntryDoneEditButton(entryId){
+     $app.append('<button id="cancelEdit">Cancel</button>');
+     $app.find('#cancelEdit').on('click', function(){
+        return displayEntry(entryId);
+     });
+     
 }
 
 function AddressBooksListButtons() {
