@@ -8,7 +8,7 @@ function displayAddressBooksList(skip) {
     getFunctions.getAddressBooks(skip).then(
         function(addressBooks) {
 
-            $app.html(''); 
+            $app.html('');
 
 
             $app.append('<h2>Address Books List</h2>');
@@ -101,7 +101,7 @@ function displayEntry(id) {
 }
 
 
-function displayEntryEdit(id){
+function displayEntryEdit(id) {
     getFunctions.getEntry(id).then(
         function(entryInfo) {
 
@@ -109,14 +109,14 @@ function displayEntryEdit(id){
             $app.append('<h2>Contact Information:</h2>');
             $app.append('<ul id="contact"></ul>');
             $app.find('ul').append('<form action="' + API_URL + '/Entries" method="put" enctype="application/json" autocomplete="off" novalidate></form>');
-            
+
             $app.find('form').append('<br>First Name: <br><input type="text" name="firstName" value="' + entryInfo[0].firstName + '">');
             $app.find('form').append('<br>Last Name: <br><input type="text" name="lastName" value="' + entryInfo[0].lastName + '">');
             $app.find('form').append('<br>Birthday: <br><input type="text" name="birthday" value="' + entryInfo[0].birthday + '">');
-            $app.find('form').append("<input type='hidden' name='id' value='"+ entryInfo[0].id +"'>");
-            $app.find('form').append("<input type='hidden' name='addressBookId' value='"+ entryInfo[0].addressBookId +"'>");
+            $app.find('form').append("<input type='hidden' name='id' value='" + entryInfo[0].id + "'>");
+            $app.find('form').append("<input type='hidden' name='addressBookId' value='" + entryInfo[0].addressBookId + "'>");
             $app.find('form').append("<input type='submit' onClick='submitForm()' style='visibility: hidden;'/>");
-            
+
             $(function submitForm() {
                 //hang on event of form with id=myform
                 $("form").submit(function(e) {
@@ -127,32 +127,61 @@ function displayEntryEdit(id){
                             type: 'put',
                             dataType: 'json',
                             data: $("form").serialize(),
-                            success: function(data) {
-                            }
-                    });
-                    displayEntry(id);
-            
+                            success: function(data) {}
+                        })
+                        .then(displayEntry.bind(null, id));
                 });
             });
-            
-            EntryDoneEditButton(id);
-           
+
+            cancelEntryEditButton(id);
+            addAddress(id)
+
         });
 }
 
-function EntryEditButton(entryId){
-     $app.append('<button id="edit">EDIT</button>');
-     $app.find('#edit').on('click', function(){
-        return displayEntryEdit(entryId);
-     });
+function addAddress(id) {
+
+    $app.append('<button id="addAddress">ADD</button>');
+    $app.find('#addAddress').on('click', function() {
+        return popupFormAddress();
+    });
+
+    function popupFormAddress() {
+        
+        
+        
+        $(function submitForm() {
+                //hang on event of form with id=myform
+                $("form").submit(function(e) {
+                    e.preventDefault();
+                    var actionurl = e.currentTarget.action;
+                    $.ajax({
+                            url: actionurl,
+                            type: 'put',
+                            dataType: 'json',
+                            data: $("form").serialize(),
+                            success: function(data) {}
+                        })
+                        .then(displayEntry.bind(null, id));
+                });
+            });
+    }
+
 }
 
-function EntryDoneEditButton(entryId){
-     $app.append('<button id="cancelEdit">Cancel</button>');
-     $app.find('#cancelEdit').on('click', function(){
+function EntryEditButton(entryId) {
+    $app.append('<button id="edit">EDIT</button>');
+    $app.find('#edit').on('click', function() {
+        return displayEntryEdit(entryId);
+    });
+}
+
+function cancelEntryEditButton(entryId) {
+    $app.append('<button id="cancelEdit">Cancel</button>');
+    $app.find('#cancelEdit').on('click', function() {
         return displayEntry(entryId);
-     });
-     
+    });
+
 }
 
 function AddressBooksListButtons() {
@@ -271,7 +300,7 @@ function entryButtons(addressBookId) {
 
 module.exports = {
     EntryEditButton: EntryEditButton,
-    EntryDoneEditButton: EntryDoneEditButton,
+    cancelEntryEditButton: cancelEntryEditButton,
     AddressBooksListButtons: AddressBooksListButtons,
     AddressBookEntriesButtons: AddressBookEntriesButtons,
     entryButtons: entryButtons
