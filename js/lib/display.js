@@ -64,6 +64,7 @@ function displayEntry(id) {
             $app.find('#contact').append('<li>' + "First Name: " + entryInfo[0].firstName + '</li>');
             $app.find('#contact').append('<li>' + "Lirst Name: " + entryInfo[0].lastName + '</li>');
             $app.find('#contact').append('<li>' + "Birthday: " + entryInfo[0].birthday + '</li>');
+            
             $app.find('#contact').append('<ul id="addresses">' + "address(es): " + '</ul>');
             entryInfo[0].addresses.forEach(function(ad, ind) {
 
@@ -104,11 +105,10 @@ function displayEntry(id) {
 function displayEntryEdit(id) {
     getFunctions.getEntry(id).then(
         function(entryInfo) {
-
             $app.html(''); // Clear the #app div
             $app.append('<h2>Contact Information:</h2>');
             $app.append('<ul id="contact"></ul>');
-            $app.find('ul').append('<form action="' + API_URL + '/Entries" method="put" enctype="application/json" autocomplete="off" novalidate></form>');
+            $app.find('ul').append('<form id="basicEdit" action="' + API_URL + '/Entries" method="put" enctype="application/json" autocomplete="off" novalidate></form>');
 
             $app.find('form').append('<br>First Name: <br><input type="text" name="firstName" value="' + entryInfo[0].firstName + '">');
             $app.find('form').append('<br>Last Name: <br><input type="text" name="lastName" value="' + entryInfo[0].lastName + '">');
@@ -119,54 +119,93 @@ function displayEntryEdit(id) {
 
             $(function submitForm() {
                 //hang on event of form with id=myform
-                $("form").submit(function(e) {
+                $("#basicEdit").submit(function(e) {
                     e.preventDefault();
                     var actionurl = e.currentTarget.action;
                     $.ajax({
                             url: actionurl,
                             type: 'put',
                             dataType: 'json',
-                            data: $("form").serialize(),
+                            data: $("#basicEdit").serialize(),
                             success: function(data) {}
                         })
                         .then(displayEntry.bind(null, id));
                 });
             });
+            
+            $app.find('#contact').append('<ul id="addresses">' + "address(es): " + '</ul>');
+            addAddressButton(id);
+            entryInfo[0].addresses.forEach(function(ad, ind) {
+                
+                $app.find('#addresses').append('<li>  Address #' + ind + 1 + '</li>');
+                
+                $app.find('#addresses').append('<li>' + "line1 :" + ad.line1 + '</li>');
+                $app.find('#addresses').append('<li>' + "line2 :" + ad.line2 + '</li>');
+                $app.find('#addresses').append('<li>' + "city :" + ad.city + '</li>');
+                $app.find('#addresses').append('<li>' + "state :" + ad.state + '</li>');
+                $app.find('#addresses').append('<li>' + "zip :" + ad.zip + '</li>');
+                $app.find('#addresses').append('<li>' + "country :" + ad.country + '</li>');
+                $app.find('#addresses').append('<li>' + "type :" + ad.type + '</li>');
+            });
+            
+            $app.find('#contact').append('<ul id="phones">' + "phone(s): " + '</ul>');
 
+            entryInfo[0].phones.forEach(function(ph, ind) {
+                $app.find('#phones').append('<li>  Phone #' + ind + 1 + '</li>');
+
+                $app.find('#phones').append('<li>' + "Phone Number :" + ph.phoneNumber + '</li>');
+                $app.find('#phones').append('<li>' + "Type :" + ph.type + '</li>');
+                $app.find('#phones').append('<li>' + "Phone Type :" + ph.phoneType + '</li>');
+            });
+
+            $app.find('#contact').append('<ul id="emails">' + "email(s): " + '</ul>');
+            
+            entryInfo[0].emails.forEach(function(em, ind) {
+                
+                $app.find('#emails').append('<li>  Email #' + ind + 1 + '</li>');
+                $app.find('#emails').append('<li>' + "Email Address :" + em.email + '</li>');
+                $app.find('#emails').append('<li>' + "Type :" + em.type + '</li>');
+            });
+            
             cancelEntryEditButton(id);
-            addAddress(id)
-
+            
         });
 }
 
-function addAddress(id) {
 
-    $app.append('<button id="addAddress">ADD</button>');
-    $app.find('#addAddress').on('click', function() {
-        return popupFormAddress();
-    });
 
-    function popupFormAddress() {
-        
-        
-        
-        $(function submitForm() {
-                //hang on event of form with id=myform
-                $("form").submit(function(e) {
-                    e.preventDefault();
-                    var actionurl = e.currentTarget.action;
-                    $.ajax({
-                            url: actionurl,
-                            type: 'put',
-                            dataType: 'json',
-                            data: $("form").serialize(),
-                            success: function(data) {}
-                        })
-                        .then(displayEntry.bind(null, id));
-                });
+function popupFormAddress(id) {
+
+    var $overlay = $('<div class="overlay"></div>');
+    var $addressForm = $( '<form id="addressForm" action="' + API_URL + '/Addresses" method="post" enctype="application/json" autocomplete="off" novalidate>Line 1:<br><input type="text" name="line1"><br>Line 2:<br><input type="text" name="line2"><br><br>City:<br><input type="text" name="city"><br><br>State:<br><input type="text" name="state"><br><br>Zip:<br><input type="text" name="zip"><br><br>Country:<br><input type="text" name="country"><br><br>Type:<br><input type="text" name="type"><br><input type="hidden" name="entryId" value="' + id + '"><br><input type="submit" value="Submit" onClick="submitForm()" style="visibility: hidden;"/></form>');
+    $overlay.append($addressForm);
+    
+    $('body').append($overlay);
+
+    $(function submitForm() {
+            //hang on event of form with id=myform
+            $("#addressForm").submit(function(e) {
+                e.preventDefault();
+                var actionurl = e.currentTarget.action;
+                $.ajax({
+                        url: actionurl,
+                        type: 'post',
+                        dataType: 'json',
+                        data: $("#addressForm").serialize(),
+                        success: function(data) {}
+                })
+                .then(displayEntry.bind(null, id))
+                .then( $overlay.hide() );
             });
-    }
+        });
+}
 
+function addAddressButton(id) {
+
+    $app.find('#addresses').append('<button id="addAddress">ADD</button>');
+    $app.find('#addAddress').on('click', function() {
+        return popupFormAddress(id);
+    });
 }
 
 function EntryEditButton(entryId) {
